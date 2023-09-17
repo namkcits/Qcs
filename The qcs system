@@ -1,0 +1,67 @@
+from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute, Aer
+from qiskit.providers.aer import noise
+
+# Quantum code setup
+number_of_qubits = 2  # Using 2 qubits for the quantum circuit
+number_of_classical_bits = 2
+qregs = QuantumRegister(number_of_qubits, name="q")
+cregs = ClassicalRegister(number_of_classical_bits, name="c")
+circuit = QuantumCircuit(qregs, cregs)
+
+# Define error model for the simulator (example: depolarizing noise)
+error_model = noise.NoiseModel()
+error_model.add_all_qubit_quantum_error(noise.depolarizing_error(0.01, 1), ['u1', 'u2', 'u3', 'x', 'y', 'z'])
+
+backend = Aer.get_backend('qasm_simulator')
+backend.set_options(noise_model=error_model)
+
+# Define custom gates for cybersecurity entanglement (hcnoth)
+def quantum_cybersecurity_entanglement(circuit, q1, q2):
+    circuit.h(q1)
+    circuit.cnot(q1, q2)
+    circuit.x(q1)
+    circuit.h(q1)
+
+# Define a global flag to track the trip wire trigger
+trip_wire_triggered = False
+
+# Function to simulate quantum trap and analysis
+def quantum_trap_and_analysis():
+    global trip_wire_triggered
+
+    if trip_wire_triggered:
+        # Apply 'hh hxxh hcnoth' operations when the trip wire is triggered
+        circuit.h(qregs[0])
+        circuit.h(qregs[1])
+        circuit.h(qregs[0])
+        circuit.x(qregs[0])
+        circuit.x(qregs[1])
+        quantum_cybersecurity_entanglement(circuit, qregs[0], qregs[1])
+
+        # Measure the qubits
+        circuit.measure(qregs, cregs)
+    else:
+        # Apply your custom quantum cybersecurity entanglement operation when the trip wire is not triggered
+        quantum_cybersecurity_entanglement(circuit, qregs[0], qregs[1])
+        circuit.measure(qregs, cregs)
+
+# Set the trip wire trigger flag to activate the quantum trap
+trip_wire_triggered = True
+
+# Simulate the quantum trap and analysis
+quantum_trap_and_analysis()
+
+# Simulate the circuit
+simulator = Aer.get_backend('qasm_simulator')
+job = execute(circuit, simulator, shots=1024)
+result = job.result()
+counts = result.get_counts(circuit)
+
+# Determine if a threat was detected based on measurement results
+threat_detected = '00' in counts
+
+# Print the detection result
+if threat_detected:
+    print("Threat detected!")
+else:
+    print("No threat detected.")
