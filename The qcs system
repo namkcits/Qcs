@@ -60,6 +60,7 @@ counts = result.get_counts(circuit)
 # Determine if a threat was detected based on measurement results
 threat_detected = '00' in counts
 
+
 # Print the detection result
 if threat_detected:
     print("Threat detected!")
