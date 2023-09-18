@@ -17,7 +17,7 @@ class MalwareDetectionApp(App):
         self.backend = Aer.get_backend('qasm_simulator')
         self.simulator = Aer.get_backend('qasm_simulator')
         self.label = None
-        self.location = None  # Initialize location attribute
+        self.location = None
 
     def build(self):
         self.layout = BoxLayout(orientation='vertical')
@@ -27,19 +27,6 @@ class MalwareDetectionApp(App):
         self.layout.add_widget(self.label)
         self.layout.add_widget(self.button)
         return self.layout
-
-    def quantum_trap_and_analysis(self):
-        if self.trip_wire_triggered:
-            self.circuit.h(self.qregs[0])
-            self.circuit.h(self.qregs[1])
-            self.circuit.h(self.qregs[0])
-            self.circuit.x(self.qregs[0])
-            self.circuit.x(self.qregs[1])
-            self.quantum_cybersecurity_entanglement(self.qregs[0], self.qregs[1])
-            self.circuit.measure(self.qregs, self.cregs)
-        else:
-            self.quantum_cybersecurity_entanglement(self.qregs[0], self.qregs[1])
-            self.circuit.measure(self.qregs, self.cregs)
 
     def quantum_cybersecurity_entanglement(self, q1, q2):
         self.circuit.h(q1)
@@ -65,7 +52,6 @@ class MalwareDetectionApp(App):
         counts = result.get_counts(self.circuit)
         threat_detected = '00' in counts
 
-        # Check the user's location (replace 'USA' with the actual location detection logic)
         if self.location == 'USA':
             if threat_detected:
                 self.label.text = "Threat Detected in USA! Neutralizing..."
@@ -79,8 +65,18 @@ class MalwareDetectionApp(App):
             else:
                 self.label.text = "No Threat Detected."
 
+    def quantum_trap_and_analysis(self):
+        if self.trip_wire_triggered:
+            for i, qreg in enumerate(self.qregs):
+                self.circuit.h(qreg)
+                self.circuit.x(qreg)
+                self.quantum_cybersecurity_entanglement(qreg, self.qregs[(i + 1) % self.number_of_qubits])
+            self.circuit.measure(self.qregs, self.cregs)
+        else:
+            self.quantum_cybersecurity_entanglement(self.qregs[0], self.qregs[1])
+            self.circuit.measure(self.qregs, self.cregs)
+
     def neutralize_malware(self):
-        # Simulate malware neutralization (abstract representation)
         self.label.text = "Malware Neutralized!"
 
 if __name__ == '__main__':
