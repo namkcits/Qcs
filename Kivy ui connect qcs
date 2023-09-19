@@ -8,11 +8,11 @@ from qiskit.providers.aer import noise
 class MalwareDetectionApp(App):
     def __init__(self):
         super().__init__()
-        self.number_of_qubits = 2
+        self.number_of_qubits = 100
         self.qregs = QuantumRegister(self.number_of_qubits, name="q")
         self.cregs = ClassicalRegister(2, name="c")
         self.circuit = QuantumCircuit(self.qregs, self.cregs)
-        self.trip_wire_triggered = False
+        self.trip_wire_triggered = True
         self.error_model = noise.NoiseModel()
         self.backend = Aer.get_backend('qasm_simulator')
         self.simulator = Aer.get_backend('qasm_simulator')
